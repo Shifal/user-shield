@@ -6,17 +6,16 @@ import com.shifal.userapi.dto.UserResponse;
 import com.shifal.userapi.exception.UserAlreadyExistsException;
 import com.shifal.userapi.model.User;
 import com.shifal.userapi.repository.UserRepository;
-import com.shifal.userapi.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
     public UserResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -37,6 +36,7 @@ public class UserService {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .message("User created successfully")
                 .build();
     }
 
@@ -66,7 +66,24 @@ public class UserService {
                 .build();
     }
 
-    public UserResponse getProfile(Long userId) {
+    public Object getProfile(Long userId) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        boolean isAdmin = currentUser.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return userRepository.findAll().stream()
+                    .map(user -> UserResponse.builder()
+                            .id(user.getId())
+                            .email(user.getEmail())
+                            .firstName(user.getFirstName())
+                            .lastName(user.getLastName())
+                            .message("user details fetch successfully!!")
+                            .build())
+                    .toList();
+        }
+
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -75,6 +92,7 @@ public class UserService {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .message("user details fetch successfully!!")
                 .build();
     }
 }

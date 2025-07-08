@@ -22,12 +22,12 @@ This project is a secure RESTful API built with Java 17 and Spring Boot. It prov
 
 ## Endpoints Overview
 
-| Method | Endpoint              | Description                       | Authentication Required |
-|--------|-----------------------|-----------------------------------|--------------------------|
-| POST   | /api/auth/register    | Register a new user               | No                       |
-| POST   | /api/auth/login       | Authenticate user and get token   | No                       |
-| GET    | /me                   | het logged-in user’s profile data | Yes (JWT)                |
-| PUT    | /me                   | Update logged-in user’s profile   | Yes (JWT)                |
+| Method | Endpoint           | Description                       | Authentication Required |
+|--------|--------------------|-----------------------------------|-------------------------|
+| POST   | /api/auth/register | Register a new user               | No                      |
+| POST   | /api/auth/login    | Authenticate user and get token   | No                      |
+| GET    | /me                | get logged-in user’s profile data | Yes (JWT)               |
+| PUT    | /me                | Update logged-in user’s profile   | Yes (JWT)               |
 ## Security Handling
 
 - All endpoints except `/api/auth/**` require a valid JWT token in the `Authorization` header.
