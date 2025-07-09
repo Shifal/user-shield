@@ -63,6 +63,7 @@ public class UserService {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .message("user details updated successfully!!")
                 .build();
     }
 
