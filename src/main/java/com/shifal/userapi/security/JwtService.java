@@ -3,7 +3,6 @@ package com.shifal.userapi.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -81,7 +80,6 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        // Use the raw secret string directly since it's not base64 encoded
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 }
